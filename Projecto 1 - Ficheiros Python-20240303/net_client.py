@@ -10,22 +10,20 @@ class net_client:
     def __init__(self, host, port):
         self.host = host
         self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-     
+
     def connect(self):
-        return create_tcp_client_socket(self.host, self.port)
+        self.socket = create_tcp_client_socket(self.host, self.port)
 
     def recv(self):
         try:
-            data = (self.connect().recv(1024)).decode()
+            data = self.socket.recv(1024).decode()
             return data
         except Exception as e:
             print(f"Error receiving data: {e}")
     
     def send(self, data):
         try:
-            conn_sock = self.connect(self.host, self.port)
-            conn_sock.sendall(data.encode())
+            self.socket.sendall(data.encode())
         except Exception as e:
             print(f"Error sending data: {e}")
 
