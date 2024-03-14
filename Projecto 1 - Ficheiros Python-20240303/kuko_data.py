@@ -57,7 +57,7 @@ class Quiz:
         self.id_quiz = Quiz.quizIdCounter
         self.Qset = QSet
         self.question_set = QSet.questions
-        
+
         
 
     
@@ -90,10 +90,11 @@ class Kuko:
                 questionsToAdd.append(Kuko.Questions[i])
 
         newQSet = QSet(questionsToAdd)
-        Kuko.QSets.append()
+        Kuko.QSets[newQSet.qSetId] = newQSet
         return newQSet
     
     def createQuiz():
+        pass
 
     
     def __str__():
