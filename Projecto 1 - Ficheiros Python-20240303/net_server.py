@@ -1,7 +1,7 @@
 """
 Aplicações Distribuídas - Projeto 1 - net_server.py
-Grupo: XX
-Números de aluno: XXXXX XXXXX
+Grupo: 17
+Números de aluno: 56943 56922
 """
 import socket
 from sock_utils import *
