@@ -27,7 +27,7 @@ class Question:
             raise Exception("k is not a valid answer index")
 
     def __str__(self):
-        print("Question id: " + str(self.id) + "\n" +
+        return str("Question id: " + str(self.id) + "\n" +
              "Question: " + self.question + "\n" +
              "Possible answers: " + str(self.answers) + "\n" +
              "Correct answer: " + str(self.answers[self.k - 1]))
@@ -44,7 +44,7 @@ class QSet:
         self.questions = questions
 
     def __str__(self):
-        print("QSet id: " + str(self.qSetId) + "\n" +
+        return str("QSet id: " + str(self.qSetId) + "\n" +
               "Questions : " + str(self.questions))
 
 class Quiz:
@@ -59,9 +59,15 @@ class Quiz:
         self.questions = QSet.questions
         self.pontos = pontos
         self.state = "CREATED"
+
+        self.participants = []
     
+
+    def add_participant (self, participant_id):
+        self.participants.append(participant_id)
+
     def __str__(self):
-        print("Quizz id: " + str(self.id_quiz) + "\n" +
+        return str("Quizz id: " + str(self.id_quiz) + "\n" +
               "QSet: " + str(self.Qset) + "\n" +
               "Questions in qSet: " + str(self.questions) + "\n" +
               "Pontos: " + str(self.pontos))
@@ -96,31 +102,32 @@ class Kuko:
         Kuko.Quizes[newQuiz.id_quiz] = newQuiz
         return newQuiz
 
-
+    def add_participant (quiz_id, participant_id):
+        if quiz_id in Kuko.Quizes.keys():
+            Kuko.Quizes[quiz_id].add_participant(participant_id)
     
     def __str__():
-        print(str(Kuko.Questions) + "\n" + 
+        return str(str(Kuko.Questions) + "\n" + 
               str(Kuko.QSets) + "\n" +
-              str(Kuko.Quizes))
-
- 
-
-
-
+              str(Kuko.Quizes[1].participants))
 
 #Tests 
 
-Kuko.createQuestion("What is my name?", ["Manel", "Antonio", "João"], 1).__str__()
-Kuko.createQuestion("Where do I live?", ["Lisbon", "Porto"], 1).__str__()
-Kuko.createQuestion("Where do I want to live?", ["Lisbon", "Porto", "Dubai"], 3).__str__()
+Kuko.createQuestion("What is my name?", ["Manel", "Antonio", "João"], 1)
+Kuko.createQuestion("Where do I live?", ["Lisbon", "Porto"], 1)
+Kuko.createQuestion("Where do I want to live?", ["Lisbon", "Porto", "Dubai"], 3)
 
-Kuko.createQSet([1,2]).__str__()
+Kuko.createQSet([1,2])
 Kuko.createQSet([1,2,3])
 
 Kuko.createQuiz(1,[20,80])
 Kuko.createQuiz(2,[20,20,60])
 
-Kuko.__str__()
+Kuko.add_participant(1,12345)
+Kuko.add_participant(1,98867)
+Kuko.add_participant(2,12345)
+
+print(Kuko.__str__())
 
 
 # question1 = Question("What is my name?", ["Manel", "Antonio", "João"], 1)
