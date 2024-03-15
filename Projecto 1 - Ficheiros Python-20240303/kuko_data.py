@@ -58,13 +58,45 @@ class Quiz:
         self.Qset = QSet
         self.questions = QSet.questions
         self.pontos = pontos
-        self.state = "CREATED"
+        self.state = "PREPARED"
 
         self.participants = []
-    
+        self.replies = {}
+        self.timestamp_p = int(time.time())
+        self.timestamp_e = -1 #-1 = ainda não esta ENDED
+        self.question_i = self.questions[0] #question atual inicializada á primeira do qSet escolhido 
 
     def add_participant (self, participant_id):
         self.participants.append(participant_id)
+        self.replies[participant_id] = [] #Inicializa a lista das respostas de um participante
+
+    def start_quiz(self):
+        self.state = "ONGOING"
+
+    def end_quiz(self):
+        self.state = "ENDED"
+        self.timestamp_e = int(time.time())
+
+    def get_question (self):
+        return self.question_i.__str__()
+    
+    def answer_question(self, participant_id, n):
+        if participant_id in self.participants:
+            question_i_index = self.questions.index(self.question_i)
+            if len(self.questions) > question_i_index + 1: #Caso não for a ultima pergunta
+                self.replies[participant_id].append(n) #append da resposta
+                return "OK"
+
+            elif len(self.questions) == question_i_index + 1: #Caso seja a ultima:
+                self.replies[participant_id].append(n)#append da resposta
+                #Calcular os pontos
+                for i in range(len(self.questions)):
+                    points = 0 
+                    if self.questions[i].k == self.replies[participant_id][i]:
+                        points += self.pontos[i]
+                self.end_quiz() #Acaba o quiz
+                return (participant_id, points)  #Retorna o id do participante e os pontos do jogador
+
 
     def __str__(self):
         return str("Quizz id: " + str(self.id_quiz) + "\n" +
@@ -109,9 +141,10 @@ class Kuko:
     def __str__():
         return str(str(Kuko.Questions) + "\n" + 
               str(Kuko.QSets) + "\n" +
-              str(Kuko.Quizes[1].participants))
+              str(Kuko.Quizes[2].participants))
 
 #Tests 
+#Assumo que recebemos o participant_id do cliente 
 
 Kuko.createQuestion("What is my name?", ["Manel", "Antonio", "João"], 1)
 Kuko.createQuestion("Where do I live?", ["Lisbon", "Porto"], 1)
