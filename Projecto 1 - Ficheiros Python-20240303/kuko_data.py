@@ -94,7 +94,7 @@ class Quiz:
                     points = 0 
                     if self.questions[i].k == self.replies[participant_id][i]:
                         points += self.pontos[i]
-                self.end_quiz() #Acaba o quiz
+                #self.end_quiz() #Acaba o quiz
                 return (participant_id, points)  #Retorna o id do participante e os pontos do jogador
 
 
@@ -137,6 +137,18 @@ class Kuko:
     def add_participant (quiz_id, participant_id):
         if quiz_id in Kuko.Quizes.keys():
             Kuko.Quizes[quiz_id].add_participant(participant_id)
+
+    def getQuestion (quiz_id):
+        Kuko.Quizes[quiz_id].get_question()
+    
+    def start_quiz(quiz_id):
+        Kuko.Quizes[quiz_id].start_quiz()
+    
+    def end_quiz(quiz_id):
+        Kuko.Quizes[quiz_id].end_quiz()
+
+    def answer_question (quiz_id, participant_id, n):
+        Kuko.Quizes[quiz_id].answer_question(participant_id, n)
     
     def __str__():
         return str(str(Kuko.Questions) + "\n" + 
