@@ -10,9 +10,11 @@ class Server:
     def __init__(self, host, port):
         self.host = host
         self.port = port
+        self.socket = create_tcp_server_socket(host, port)
         
     def accept(self):
-        self.socket = create_tcp_server_socket(self.host, self.port)
+        client_socket, client_address = self.socket.accept()
+        return client_socket, client_address
 
     def listen(self):
         try:

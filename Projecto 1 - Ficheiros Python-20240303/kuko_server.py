@@ -30,16 +30,51 @@ def main():
         print(f"Connection created with {client_address}")
 
         #receber dados do cliente
-        data = KukoServer.recv(client_socket)
+        data = KukoServer.recv()
 
         #Processar as operações dadas pelo cliente
-        response = KukoData.process_command(data)
+        response = process_request(data, KukoData)
 
         # Envia a resposta de volta para o cliente
-        KukoServer.send(client_socket, response)
+        KukoServer.send(response)
 
         # Fecha a conexão com o cliente
-        KukoServer.close(client_socket)
+        KukoServer.close()
    
+
+def process_request(request, kuko_data):
+    try:
+        parts = request.strip().split(";")
+        operation = parts[0]
+        arguments = parts[1:]
+
+        if operation == "EXIT":
+            exit
+        elif operation == "QUESTION":
+            result = kuko_data.createQuestion(*arguments)
+            return result
+        elif operation == "QSET":
+            result = kuko_data.createQSet(*arguments)
+            return result
+        elif operation == "QUIZ":
+            result = kuko_data.createQuiz(*arguments)
+            return result
+        elif operation == "LAUNCH":
+            result = kuko_data.start_quiz(*arguments)
+            return result
+        elif operation == "REG":
+            result = kuko_data.add_participant(*arguments)
+            return result
+        elif operation == "GET":
+            result = kuko_data.getQuestion(*arguments)
+            return result
+        elif operation == "ANS":
+            result = kuko_data.answer_question(*arguments)
+            return result
+        else:
+            return "NOK"
+    except Exception as e:
+        return f"Error processing your request: {str(e)}"
+
 if __name__ == "__main__":
     main()
