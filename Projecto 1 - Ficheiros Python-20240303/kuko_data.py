@@ -115,6 +115,10 @@ Kuko.createQuestion("Where do I live?", ["Lisbon", "Porto"], 1).__str__()
 Kuko.createQuestion("Where do I want to live?", ["Lisbon", "Porto", "Dubai"], 3).__str__()
 
 Kuko.createQSet([1,2]).__str__()
+Kuko.createQSet([1,2,3])
+
+Kuko.createQuiz(1,[20,80])
+Kuko.createQuiz(2,[20,20,60])
 
 Kuko.__str__()
 
