@@ -56,24 +56,22 @@ class Quiz:
         Quiz.quizIdCounter +=1
         self.id_quiz = Quiz.quizIdCounter
         self.Qset = QSet
-        self.question_set = QSet.questions
-
-        
-
+        self.questions = QSet.questions
+        self.pontos = pontos
+        self.state = "CREATED"
     
-
-#     def __str__(self):
-#         ...
-#         return ..
-
-#     ...         
-      
+    def __str__(self):
+        print("Quizz id: " + str(self.id_quiz) + "\n" +
+              "QSet: " + str(self.Qset) + "\n" +
+              "Questions in qSet: " + str(self.questions) + "\n" +
+              "Pontos: " + str(self.pontos))
 
 
 class Kuko:
    
     Questions = {}
     QSets = {}
+    Quizes = {}
     
     def __init__(self):
        pass
@@ -93,13 +91,17 @@ class Kuko:
         Kuko.QSets[newQSet.qSetId] = newQSet
         return newQSet
     
-    def createQuiz():
-        pass
+    def createQuiz(qSet, points):
+        newQuiz = Quiz(Kuko.QSets[qSet], points)
+        Kuko.Quizes[newQuiz.id_quiz] = newQuiz
+        return newQuiz
+
 
     
     def __str__():
         print(str(Kuko.Questions) + "\n" + 
-              str(Kuko.QSets))
+              str(Kuko.QSets) + "\n" +
+              str(Kuko.Quizes))
 
  
 
