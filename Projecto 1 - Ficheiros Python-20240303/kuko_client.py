@@ -25,13 +25,14 @@ def main():
             command = input("comando > ")
 
             if command == "EXIT":
-                client_socket.sendall(command.encode())
+                client_socket.sendall([id_participant.encode(), command.encode()])
                 client_socket.close()
                 print("Conexão fechada. Adeus!")
                 break
 
             print("input != 'EXIT' ")
-            client_socket.sendall(command.encode('UTF-8'))
+            msg = str(id_participant+";"+command)
+            client_socket.sendall(msg.encode())
             response = client_socket.recv(1024).decode()
 
             print("Resposta do servidor", response)

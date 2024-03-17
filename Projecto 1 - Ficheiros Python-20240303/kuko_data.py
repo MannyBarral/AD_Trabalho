@@ -104,7 +104,9 @@ class Quiz:
               "Questions in qSet: " + str(self.questions) + "\n" +
               "Pontos: " + str(self.pontos)+ "\n" +
               "Estado: " + self.state + "\n" +
-              "Participantes: " + str(self.participants)) 
+              "Participantes: " + str(self.participants) + "\n" +
+              "Respostas: " + str(self.replies))
+     
 
 
 class Kuko:
@@ -148,9 +150,13 @@ class Kuko:
     def add_participant (self,quiz_id, participant_id):
         if quiz_id in Kuko.Quizes.keys():
             Kuko.Quizes[quiz_id].add_participant(participant_id)
+        if participant_id in Kuko.Quizes[quiz_id].participants:
+            return "OK" + "\n" + str(Kuko.Quizes[quiz_id].participants)
+        else:
+            return "NOK"
 
     def getQuestion (self,quiz_id):
-        Kuko.Quizes[quiz_id].get_question()
+        return "OK " + Kuko.Quizes[quiz_id].get_question()
     
     def start_quiz(self,quiz_id):
         Kuko.Quizes[quiz_id].start_quiz()
@@ -164,6 +170,7 @@ class Kuko:
 
     def answer_question (self,quiz_id, participant_id, n):
         Kuko.Quizes[quiz_id].answer_question(participant_id, n)
+        return "OK " + str(Kuko.Quizes[quiz_id].answer_question(participant_id, n))
     
     def __str__(self):
         return str(str(Kuko.Questions) + "\n" + 

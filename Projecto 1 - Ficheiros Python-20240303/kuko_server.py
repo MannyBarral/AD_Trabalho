@@ -50,14 +50,17 @@ def main():
             #client_socket.close()
 
 def process_request(request, kuko_data):
-    
-    parts = request.split(";")
-    operation = parts[0]
-    arguments = parts[1:]
+    if request[0] == "EXIT":
+        exit 
 
-    if operation == "EXIT":
-        exit
-    elif operation == "QUESTION":
+    parts = request.split(";")
+    id_participant = parts[0]
+    operation = parts[1]
+    arguments = parts[2:]
+
+    print(id_participant, request)
+
+    if operation == "QUESTION":
         answers = arguments[1:-1]
         k = arguments[-1]            
         result = kuko_data.createQuestion(arguments[0], answers, int(k))
@@ -71,7 +74,9 @@ def process_request(request, kuko_data):
         return result
     elif operation == "QUIZ":
         qSet = int(arguments[0])
-        points = arguments[1:]
+        points = []
+        for p in arguments[1:]:
+            points.append(int(p))
         print("Args: " + str(qSet)  + ", " + str(points))
         result = kuko_data.createQuiz(qSet, points)
         return result
@@ -81,13 +86,17 @@ def process_request(request, kuko_data):
         result = kuko_data.start_quiz(quizz_id)
         return result
     elif operation == "REG":
-        result = kuko_data.add_participant(*arguments)
+        quizz_id = int(arguments[0])
+        result = kuko_data.add_participant(quizz_id, id_participant)
         return result
     elif operation == "GET":
-        result = kuko_data.getQuestion(*arguments)
+        quizz_id = int(arguments[0])
+        result = kuko_data.getQuestion(quizz_id)
         return result
     elif operation == "ANS":
-        result = kuko_data.answer_question(*arguments)
+        id_quizz = int(arguments[0])
+        n = int(arguments[1])
+        result = kuko_data.answer_question(id_quizz, id_participant, n)
         return result
     else:
         return "NOK"
