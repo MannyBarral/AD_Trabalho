@@ -10,34 +10,39 @@ class Server:
     def __init__(self, host, port):
         self.host = host
         self.port = port
-        self.socket = create_tcp_server_socket(host, port)
+        self.listen_socket = create_tcp_server_socket(host, port, 1)
+        self.conn_socket = None
         
     def accept(self):
-        client_socket, client_address = self.socket.accept()
-        return client_socket, client_address
+        (conn_sock,(addr, port)) = self.listen_socket.accept()
+        self.conn_socket = conn_sock
+        return conn_sock, addr
 
     def listen(self):
         try:
-            self.socket.listen(1) 
+            self.listen_socket.listen(1) 
         except Exception as e:
             print(f"Error: {e}")
             exit
 
     def recv(self):
         try:
-            data = self.socket.recv(1024).decode()
+            data = self.conn_socket.recv(1024).decode()
             return data
         except Exception as e:
             print(f"Error receiving data: {e}")
     
     def send(self,texto):
         try:
-            data = self.socket.sendall(texto.encode())
+            data = self.conn_socket.sendall(texto.encode())
         except Exception as e:
             print(f"Error sending data: {e}")
 
-    def close(self):
-        self.socket.close()
+    def closeListenSocket(self):
+        self.listen_socket.close()
+    
+    def closeConnSocket (self):
+        self.conn_socket.close()
 
     def __del__(self):
-        self.socket.close()
+        self.listen_socket.close()

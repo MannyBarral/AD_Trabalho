@@ -18,11 +18,10 @@ def main():
     server_port = int(sys.argv[3])
 
     try:
-        client_socket = create_tcp_client_socket(server_address, server_port)
-        client_socket.connect((server_address, server_port))
 
         while True:
 
+            client_socket = create_tcp_client_socket(server_address, server_port)
             command = input("comando > ")
 
             if command == "EXIT":
@@ -30,11 +29,12 @@ def main():
                 client_socket.close()
                 print("Conexão fechada. Adeus!")
                 break
-            else:
-                client_socket.sendall(command.encode())
-                response = client_socket.recv(1024).decode()
 
-                print("Resposta do servidor", response)
+            print("input != 'EXIT' ")
+            client_socket.sendall(command.encode('UTF-8'))
+            response = client_socket.recv(1024).decode()
+
+            print("Resposta do servidor", response)
 
     except Exception as e:
         print("Ocorreu um erro:", e)
