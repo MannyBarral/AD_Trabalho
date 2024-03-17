@@ -76,7 +76,9 @@ def process_request(request, kuko_data):
         result = kuko_data.createQuiz(qSet, points)
         return result
     elif operation == "LAUNCH":
-        result = kuko_data.start_quiz(*arguments)
+        quizz_id = int(arguments[0])
+        print("quiz_id = " + str(quizz_id))
+        result = kuko_data.start_quiz(quizz_id)
         return result
     elif operation == "REG":
         result = kuko_data.add_participant(*arguments)

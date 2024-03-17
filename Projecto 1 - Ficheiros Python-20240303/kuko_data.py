@@ -102,7 +102,9 @@ class Quiz:
         return str("Quizz id: " + str(self.id_quiz) + "\n" +
               "QSet: " + str(self.Qset) + "\n" +
               "Questions in qSet: " + str(self.questions) + "\n" +
-              "Pontos: " + str(self.pontos))
+              "Pontos: " + str(self.pontos)+ "\n" +
+              "Estado: " + self.state + "\n" +
+              "Participantes: " + str(self.participants)) 
 
 
 class Kuko:
@@ -152,6 +154,10 @@ class Kuko:
     
     def start_quiz(self,quiz_id):
         Kuko.Quizes[quiz_id].start_quiz()
+        if Kuko.Quizes[quiz_id].state == "ONGOING":
+            return "OK" + "\n" + Kuko.Quizes[quiz_id].__str__()
+        else:
+            return "NOK"
     
     def end_quiz(self,quiz_id):
         Kuko.Quizes[quiz_id].end_quiz()
