@@ -5,6 +5,7 @@ Números de aluno: 56943 56922
 """
 import socket
 from sock_utils import *
+import pickle, struct
 
 class Server:
     def __init__(self, host, port):
@@ -27,14 +28,22 @@ class Server:
 
     def recv(self):
         try:
-            data = self.conn_socket.recv(1024).decode()
+            data_size = struct.unpack('i', self.conn_socket.recv(4))[0]
+            data_bytes = self.conn_socket.recv(data_size)
+            data = pickle.loads(data_bytes)
             return data
         except Exception as e:
             print(f"Error receiving data: {e}")
     
-    def send(self,texto):
+    def send(self,data):
         try:
-            data = self.conn_socket.sendall(texto.encode())
+            data_bytes = pickle.dumps(data)
+            data_bytes_size = struct.pack('i', len(data_bytes))
+            if self.conn_socket:
+                self.conn_socket.send(data_bytes_size)
+                self.conn_socket.send(data_bytes)
+            else:
+                print("Não existe connection Socket")
         except Exception as e:
             print(f"Error sending data: {e}")
 

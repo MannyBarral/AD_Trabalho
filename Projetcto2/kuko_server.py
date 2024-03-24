@@ -30,16 +30,22 @@ def main():
 
         print(f"Connection created with {client_address}")
 
-        KukoData = kuko_data.Kuko()
-        
-        #receber dados do cliente
         data = KukoServer.recv()
         print("recebeu dados do cliente: " + str(data))
-        #Processar as operações dadas pelo cliente
-        response = process_request(data, KukoData)
 
-        # Envia a resposta de volta para o cliente
-        KukoServer.send(response)
+        resp = ["Ack"]
+        KukoServer.send(resp)
+
+        # KukoData = kuko_data.Kuko()
+        
+        # #receber dados do cliente
+        # data = KukoServer.recv()
+        # print("recebeu dados do cliente: " + str(data))
+        # #Processar as operações dadas pelo cliente
+        # response = process_request(data, KukoData)
+
+        # # Envia a resposta de volta para o cliente
+        # KukoServer.send(response)
 
         # Fecha a conexão com o cliente
         #KukoServer.close()

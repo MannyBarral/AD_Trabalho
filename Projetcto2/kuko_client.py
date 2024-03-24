@@ -7,6 +7,7 @@ Números de aluno: 56943 56922
 import sys
 from net_client import *
 
+
 ### código do programa principal ###
 def main():
     if len(sys.argv) != 4:
@@ -17,23 +18,28 @@ def main():
     server_address = sys.argv[2]
     server_port = int(sys.argv[3])
 
+    netClient = net_client(server_address, server_port)
+
+
     try:
 
         while True:
 
-            client_socket = create_tcp_client_socket(server_address, server_port)
+            #client_socket = create_tcp_client_socket(server_address, server_port)
+            client_socket = netClient.connect()
+
             command = input("comando > ")
 
             if command == "EXIT":
-                client_socket.sendall([id_participant.encode(), command.encode()])
-                client_socket.close()
+                netClient.send([id_participant.encode(), command.encode()])
+                netClient.close()
                 print("Conexão fechada. Adeus!")
                 break
 
             print("input != 'EXIT' ")
-            msg = str(id_participant+";"+command)
-            client_socket.sendall(msg.encode())
-            response = client_socket.recv(1024).decode()
+            msg = [id_participant, command] #Ao contrario
+            netClient.send(msg)
+            response = netClient.recv()
 
             print("Resposta do servidor", response)
 
