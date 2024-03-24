@@ -7,7 +7,7 @@ import socket
 from sock_utils import *
 import pickle, struct
 
-class Server:
+class net_server:
     def __init__(self, host, port):
         self.host = host
         self.port = port

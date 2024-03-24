@@ -7,6 +7,7 @@ Números de aluno: 56943 56922
 import sys
 from net_server import *
 import kuko_data
+import select 
 
 
 
@@ -19,22 +20,45 @@ def main():
     host = sys.argv[1]
     port = int(sys.argv[2])
 
-    KukoServer = Server(host,port)
+    KukoServer = net_server(host, port)
 
     print("The Kuko server is running...")
 
-
+    socket_list = [KukoServer.listen_socket]
     
     while True:
-        (client_socket, client_address) = KukoServer.accept()
 
-        print(f"Connection created with {client_address}")
+        R, W, X = select.select(socket_list, [], [])
 
-        data = KukoServer.recv()
-        print("recebeu dados do cliente: " + str(data))
+        for sckt in R:
+            if sckt is KukoServer.listen_socket:
+                (client_socket, client_address) = KukoServer.accept()
+                addr, port = client_socket.getpeername()
+                print('New Client connected from %s:%d' % (addr, port))
+                socket_list.append(client_socket)
+            else:
+                data = KukoServer.recv()
+                if data:
+                    print("recebeu dados do cliente: " + str(data))
 
-        resp = ["Ack"]
-        KukoServer.send(resp)
+                    resp = ["Ack"]
+                    print("A ENVIAR: " + str(resp))
+                    KukoServer.send(resp)
+                else:
+                    KukoServer.closeConnSocket()
+                    socket_list.remove(sckt)
+                    print("Cliente fechou ligação" + "\n")
+
+
+        # (client_socket, client_address) = KukoServer.accept()
+
+        # print(f"Connection created with {client_address}")
+
+        # data = KukoServer.recv()
+        # print("recebeu dados do cliente: " + str(data))
+
+        # resp = ["Ack"]
+        # KukoServer.send(resp)
 
         # KukoData = kuko_data.Kuko()
         
